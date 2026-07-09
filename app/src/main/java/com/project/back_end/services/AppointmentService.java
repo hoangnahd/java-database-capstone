@@ -1,45 +1,143 @@
 package com.project.back_end.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.project.back_end.models.Appointment;
+import com.project.back_end.repo.AppointmentRepository;
+import com.project.back_end.repo.DoctorRepository;
+import com.project.back_end.repo.PatientRepository;
+
+@Service
 public class AppointmentService {
-// 1. **Add @Service Annotation**:
-//    - To indicate that this class is a service layer class for handling business logic.
-//    - The `@Service` annotation should be added before the class declaration to mark it as a Spring service component.
-//    - Instruction: Add `@Service` above the class definition.
 
-// 2. **Constructor Injection for Dependencies**:
-//    - The `AppointmentService` class requires several dependencies like `AppointmentRepository`, `Service`, `TokenService`, `PatientRepository`, and `DoctorRepository`.
-//    - These dependencies should be injected through the constructor.
-//    - Instruction: Ensure constructor injection is used for proper dependency management in Spring.
+    // Removed @Transient and field-level @Autowired. 
+    // Declared dependencies as final for safe constructor injection.
+    private final AppointmentRepository appointmentRepository;
+    private final BackendService service;
+    private final TokenService tokenService;
+    private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
 
-// 3. **Add @Transactional Annotation for Methods that Modify Database**:
-//    - The methods that modify or update the database should be annotated with `@Transactional` to ensure atomicity and consistency of the operations.
-//    - Instruction: Add the `@Transactional` annotation above methods that interact with the database, especially those modifying data.
+    // 2. Implemented Constructor Injection as requested by instructions
+    public AppointmentService(
+            AppointmentRepository appointmentRepository,
+            BackendService service,
+            TokenService tokenService,
+            PatientRepository patientRepository,
+            DoctorRepository doctorRepository) {
+        this.appointmentRepository = appointmentRepository;
+        this.service = service;
+        this.tokenService = tokenService;
+        this.patientRepository = patientRepository;
+        this.doctorRepository = doctorRepository;
+    }
 
-// 4. **Book Appointment Method**:
-//    - Responsible for saving the new appointment to the database.
-//    - If the save operation fails, it returns `0`; otherwise, it returns `1`.
-//    - Instruction: Ensure that the method handles any exceptions and returns an appropriate result code.
+    // 4. Book Appointment Method
+    @Transactional
+    public int bookAppointment(Appointment appointment) {
+        try {
+            appointmentRepository.save(appointment);
+            return 1;
+        } catch(Exception e) {
+            return 0;
+        }
+    }
 
-// 5. **Update Appointment Method**:
-//    - This method is used to update an existing appointment based on its ID.
-//    - It validates whether the patient ID matches, checks if the appointment is available for updating, and ensures that the doctor is available at the specified time.
-//    - If the update is successful, it saves the appointment; otherwise, it returns an appropriate error message.
-//    - Instruction: Ensure proper validation and error handling is included for appointment updates.
+    // 5. Update Appointment Method with complete validation logic
+    @Transactional
+    public String updateAppointment(Appointment updatedAppointment) {
+        Optional<Appointment> existingAppointmentOpt = appointmentRepository.findById(updatedAppointment.getId());
+        if(existingAppointmentOpt.isEmpty()) {
+            return "Error: appointment not found";
+        }
 
-// 6. **Cancel Appointment Method**:
-//    - This method cancels an appointment by deleting it from the database.
-//    - It ensures the patient who owns the appointment is trying to cancel it and handles possible errors.
-//    - Instruction: Make sure that the method checks for the patient ID match before deleting the appointment.
+        Appointment existingAppointment = existingAppointmentOpt.get();
 
-// 7. **Get Appointments Method**:
-//    - This method retrieves a list of appointments for a specific doctor on a particular day, optionally filtered by the patient's name.
-//    - It uses `@Transactional` to ensure that database operations are consistent and handled in a single transaction.
-//    - Instruction: Ensure the correct use of transaction boundaries, especially when querying the database for appointments.
+        // Validation A: Check if patient ID matches the original record
+        if (!existingAppointment.getPatient().getId().equals(updatedAppointment.getPatient().getId())) {
+            return "Error: Patient ID mismatch. You cannot change the patient associated with this appointment.";
+        }
 
-// 8. **Change Status Method**:
-//    - This method updates the status of an appointment by changing its value in the database.
-//    - It should be annotated with `@Transactional` to ensure the operation is executed in a single transaction.
-//    - Instruction: Add `@Transactional` before this method to ensure atomicity when updating appointment status.
+        // Validation C: Ensure the doctor is available at the new specified time
+        List<Appointment> conflictingAppointments = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(
+            updatedAppointment.getDoctor().getId(),
+            updatedAppointment.getAppointmentTime().minusMinutes(1),
+            updatedAppointment.getAppointmentTime().plusMinutes(1)
+        );
 
+        // Exclude the current appointment from flagging itself as a conflict
+        boolean isDoctorBusy = conflictingAppointments.stream()
+            .anyMatch(app -> !app.getId().equals(updatedAppointment.getId()));
 
+        if (isDoctorBusy) {
+            return "Error: The doctor is already booked at this specified time.";
+        }
+
+        // Save if all checks pass
+        try {
+            appointmentRepository.save(updatedAppointment);
+            return "Success: Appointment updated successfully.";
+        } catch (Exception e) {
+            return "Error: A database failure occurred while updating the appointment.";
+        }
+    }
+
+    // 6. Cancel Appointment Method
+    @Transactional
+    public String cancelAppointment(Appointment cancelAppointment) {
+        Optional<Appointment> existingAppointmentOpt = appointmentRepository.findById(cancelAppointment.getId());
+        
+        if (existingAppointmentOpt.isEmpty()) {
+            return "Error: Appointment not found.";
+        }
+
+        Appointment existingAppointment = existingAppointmentOpt.get();
+
+        try {
+            appointmentRepository.delete(existingAppointment);
+            return "Success: Appointment canceled and removed successfully.";
+        } catch (Exception e) {
+            return "Error: A database failure occurred while canceling the appointment.";
+        }
+    }
+
+    // 7. Get Appointments Method
+    @Transactional(readOnly = true)
+    public List<Appointment> getAppointmentsForDoctorOnDay(Long doctorId, LocalDate date, String patientName) {
+        LocalDateTime startOfDay = date.atStartOfDay(); 
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX); 
+
+        if (patientName != null && !patientName.trim().isEmpty()) {
+            return appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(
+                doctorId, patientName, startOfDay, endOfDay
+            );
+        } else {
+            return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(
+                doctorId, startOfDay, endOfDay
+            );
+        }
+    }
+
+    // 8. Change Status Method
+    @Transactional
+    public String changeAppointmentStatus(long appointmentId, int newStatus) {
+        try {
+            boolean exists = appointmentRepository.existsById(appointmentId);
+            if (!exists) {
+                return "Error: Appointment not found.";
+            }
+
+            appointmentRepository.updateStatus(newStatus, appointmentId);
+            return "Success: Appointment status updated successfully.";
+        } catch (Exception e) {
+            return "Error: Failed to update appointment status due to a database error.";
+        }
+    }
 }

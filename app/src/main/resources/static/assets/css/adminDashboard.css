@@ -1,94 +1,286 @@
-/*this is the style sheet for the adminDashboard. */
+:root {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --border: #dfe7f1;
+  --text: #123040;
+  --muted: #5e7384;
+  --primary: #1f6feb;
+  --primary-dark: #174fa3;
+  --secondary: #f0f5ff;
+  --accent: #2dbd8f;
+  --shadow: 0 12px 30px rgba(18, 48, 64, 0.08);
+  --radius: 18px;
+}
 
-/* 
-Global Reset (`*`)
+* {
+  box-sizing: border-box;
+}
 
-* Purpose: Ensure consistent layout across all browsers.
-* Properties:
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #eef5ff 0%, var(--bg) 100%);
+  color: var(--text);
+}
 
-  * `margin: 0` — removes default outer spacing from all elements.
-  * `padding: 0` — removes default inner spacing.
-  * `box-sizing: border-box` — ensures padding and borders are included within the total width/height of elements.
+button,
+input,
+select {
+  font: inherit;
+}
 
-Base HTML & Body (`html, body`)
+.app-shell {
+  min-height: 100vh;
+  padding: 1rem;
+}
 
-* Purpose: Establish a full-height layout and apply a standard font across the page.
-* Properties:
+.topbar,
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
 
-  * `height: 100%` — allows containers to stretch to the full viewport height.
-  * `font-family: Arial, sans-serif` — applies a clean, readable sans-serif font.
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
 
-Main Layout Wrapper (`.wrapper`)
+.topbar h1 {
+  margin: 0.2rem 0 0;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
 
-* Purpose: Create a flexible, vertical layout that fills the entire screen.
-* Properties:
+.eyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
 
-  * `display: flex` — enables flexbox for layout control.
-  * `flex-direction: column` — stacks children vertically.
-  * `min-height: 100vh` — ensures the wrapper always covers full screen height.
+.dashboard {
+  display: grid;
+  gap: 1rem;
+}
 
-Section Heading (`h2`)
+.card {
+  padding: 1.25rem;
+}
 
-* Purpose: Style the headings prominently for section separation.
-* Properties:
+.hero {
+  display: grid;
+  gap: 1rem;
+}
 
-  * `font-size: 32px` — makes the heading large and noticeable.
-  * `font-weight: bold` — emphasizes text.
-  * `margin-bottom: 50px` — creates space below the heading.
-  * `color: #003e3e` — uses a strong teal for visual anchoring.
+.hero h2 {
+  margin: 0.2rem 0 0.3rem;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
 
-Main Content Section (`.main-content`)
+.hero-copy {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
 
-* Purpose: Layout the main content with padding and a background image.
-* Properties:
+.stats-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 
-  * `flex-grow: 1` — lets the content fill the available vertical space.
-  * `padding: 40px` — adds internal spacing around content.
-  * `display: flex` and `flex-direction: column` — organizes content in a vertical stack.
-  * `text-align: center` — centers the text.
-  * `background-image: url("index.png")` — sets a full-screen dashboard background.
-  * `background-size: cover` — ensures the image covers the whole section.
-  * `background-position: center` — centers the image.
-  * `background-repeat: no-repeat` — avoids tiling the image.
-  * `background-attachment: fixed` — fixes the image while scrolling.
+.stat-card {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+}
 
-Primary Button (`button`)
+.stat-value {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
 
-* Purpose: Design prominent, interactive buttons for main actions.
+.stat-label {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
 
-* Properties:
+.controls-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr;
+}
 
-  * `background-color: #A62B1F` — sets a bold red color.
-  * `color: white` — makes text stand out.
-  * `border: none` — removes any outline/border.
-  * `border-radius: 12px` — creates rounded corners.
-  * `padding: 10px 20px` — gives space inside the button.
-  * `margin-top: 20px` — adds spacing above the button.
-  * `width: 200px` — ensures consistent button width.
-  * `cursor: pointer` — shows a hand icon on hover.
-  * `font-size: 16px` — makes the text readable.
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
 
-* On Hover:
+.field input,
+.field select {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+}
 
-  * Retains the same red background to maintain branding.
+.primary-btn,
+.secondary-btn,
+.icon-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease;
+}
 
-Admin Button (`.adminBtn`)
+.primary-btn {
+  background: var(--primary);
+  color: #fff;
+}
 
-* Purpose: Provide a secondary button style for admin-specific actions.
+.secondary-btn {
+  background: var(--secondary);
+  color: var(--primary-dark);
+}
 
-* Properties:
+.primary-btn:hover,
+.secondary-btn:hover,
+.icon-btn:hover {
+  transform: translateY(-1px);
+}
 
-  * `background-color: #f4f4f4` — uses a light grey background.
-  * `color: #333` — uses dark text for contrast.
-  * `font-weight: bold` — emphasizes text.
-  * `width: 110px` — smaller, compact width.
-  * `padding: 10px 0` — vertical padding only.
-  * `border: none` — clean look.
-  * `cursor: pointer` — indicates it's clickable.
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
 
-* On Hover**:
+.status-message {
+  color: var(--primary);
+  font-size: 0.95rem;
+}
 
-   Changes text color to `#A62B1F` for brand consistency while keeping the background same.
+.doctor-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
 
+.doctor-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  background: linear-gradient(180deg, #fff 0%, var(--surface-muted) 100%);
+}
 
-*/
+.doctor-card h4 {
+  margin: 0 0 0.25rem;
+}
+
+.doctor-meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0.15rem 0;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+
+.tag {
+  background: var(--secondary);
+  color: var(--primary-dark);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.empty-state {
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.modal {
+  border: none;
+  border-radius: 20px;
+  padding: 0;
+  width: min(92vw, 560px);
+}
+
+.modal::backdrop {
+  background: rgba(9, 28, 41, 0.5);
+}
+
+.modal-form {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.25rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-btn {
+  width: 2.3rem;
+  height: 2.3rem;
+  background: var(--secondary);
+  color: var(--primary-dark);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 720px) {
+  .app-shell {
+    padding: 1.5rem;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1.5fr 1fr 1fr auto;
+    align-items: end;
+  }
+
+  .doctor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: 1.3fr 0.8fr;
+    align-items: center;
+  }
+
+  .doctor-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

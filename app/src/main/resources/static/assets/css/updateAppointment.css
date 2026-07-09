@@ -1,89 +1,109 @@
 /* This is the style sheet for the updateAppointment.html */
+
+:root {
+  --update-primary: #015c5d;
+  --update-primary-dark: #003e3e;
+  --update-accent: #a62b1f;
+  --update-border: #dfe7eb;
+}
+
 .form-container {
-    max-width: 600px;
-    background: #ffffffc8;
-    margin: 10px auto;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.5s ease-in-out;
-  }
+  max-width: 620px;
+  background: rgba(255, 255, 255, 0.94);
+  margin: 1.25rem auto;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease-in-out;
+}
 
-  .container h2 {
-    text-align: center;
-    color: #222;
-    font-size: 28px;
-    margin-bottom: 25px;
-  }
+.container h2 {
+  text-align: center;
+  color: #222;
+  font-size: 1.7rem;
+  margin-bottom: 1.5rem;
+}
 
-  .container h2 span {
-    color: #A62B1F;
-  }
+.container h2 span {
+  color: var(--update-accent);
+}
 
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: #333;
-    text-align: left;
-    font-size: 13px;
-  }
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #334;
+  text-align: left;
+  font-size: 0.95rem;
+}
 
-  input, textarea ,select {
-    width: 100%;
-    padding: 12px;
-    resize: vertical;
-    margin-bottom: 20px;
-    border: 1px solid #cccccc6e;
-    border-radius: 8px;
-    font-size: 15px;
-    outline: none;
-    transition: 0.3s;
-    font-family: "Verdana";
-  }
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  resize: vertical;
+  margin-bottom: 1rem;
+  border: 1px solid var(--update-border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: Arial, sans-serif;
+}
 
-  input:focus, textarea:focus {
-    border-color: #015c5d;
-    box-shadow: 0 0 4px #a7f3d0;
-    filter: brightness(1.5);
-  }
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--update-primary);
+  box-shadow: 0 0 0 3px rgba(1, 92, 93, 0.12);
+}
 
-  #patientName{
-    background-color: #bdbcbc80;
-  }
-  .btn-primary {
-    background-color: #047857;
-    color: #fff;
-    padding: 14px;
-    width: 100%;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+#patientName {
+  background-color: #f2f4f6;
+}
 
-  .btn-primary:hover {
-    background-color: #065f46;
-  }
+.btn-primary {
+  background-color: var(--update-primary);
+  color: #fff;
+  padding: 0.9rem 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
-  .btn-secondary {
-    background-color: transparent;
-    color: #333;
-    border: 1px solid #ccc;
-    padding: 12px;
-    width: 100%;
-    border-radius: 8px;
-    font-size: 15px;
-    margin-top: 12px;
-    cursor: pointer;
-  }
+.btn-primary:hover {
+  background-color: var(--update-primary-dark);
+}
 
-  .btn-secondary:hover{
-    color: #fff;
-  }
+.btn-secondary {
+  background-color: transparent;
+  color: #334;
+  border: 1px solid var(--update-border);
+  padding: 0.8rem 1rem;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
+  cursor: pointer;
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
+.btn-secondary:hover {
+  color: #fff;
+  background: var(--update-accent);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 720px) {
+  .form-container {
+    padding: 1.25rem;
   }
+}
+

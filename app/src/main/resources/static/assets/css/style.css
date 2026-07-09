@@ -1,263 +1,239 @@
 /* This is the style sheet for global change across the files. */
 
-/* style.css */
+:root {
+  --global-primary: #015c5d;
+  --global-primary-dark: #003e3e;
+  --global-accent: #a62b1f;
+  --global-surface: #f8fafc;
+  --global-border: #dfe7eb;
+  --global-text: #213743;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--global-text);
+  background: linear-gradient(135deg, #f7fbff 0%, #eef4f8 100%);
+}
+
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f4f4f4;
-    color: #333;
-    padding: 10px 20px;
-    border-bottom: 2px solid #ccc;
-    flex-wrap: wrap;
-    min-height: 60px;
-  }
-  
-  /* Logo section with image + title */
-  .logo-link{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    
-  }
-  
-  .logo-img {
-    height: 40px;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-  }
-  
-  /* Logo text / slogan */
-  .logo-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* Nav links styling */
-  nav a {
-    margin-left: 20px;
-    margin-right: 20px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  nav a:hover {
-    color: #003e3e;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  color: var(--global-text);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--global-border);
+  flex-wrap: wrap;
+  min-height: 64px;
+  box-shadow: 0 4px 14px rgba(33, 55, 67, 0.06);
+}
 
-  /* Responsive behavior */
-  @media (max-width: 600px) {
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    nav {
-      margin-top: 10px;
-    }
-  
-    nav a {
-      margin-left: 0;
-      margin-right: 10px;
-    }
-  
-    .logo-img {
-      height: 30px;
-    }
-  
-    .logo-title {
-      font-size: 18px;
-    }
-  }
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
 
-  .doctorHeader{
-    margin-right: 30px
-  }
-  .doctorHeader:hover{
-    color:#A62B1F;
-  }
-/* Footer Section */
+.logo-img {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.logo-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--global-primary-dark);
+}
+
+nav a {
+  margin: 0 0.65rem;
+  text-decoration: none;
+  color: var(--global-text);
+  font-weight: 600;
+}
+
+nav a:hover {
+  color: var(--global-primary);
+}
+
+.doctorHeader {
+  margin-right: 1rem;
+}
+
+.doctorHeader:hover {
+  color: var(--global-accent);
+}
+
 .footer {
-    background-color: #f4f4f4;
-    color: #fff;
-    padding: 40px 20px;
-    border-top: 2px solid #f4f4f4;
-    
-  }
-  
-  .footer-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .footer-logo {
-    flex: 1 1 250px;
-    display: flex;
+  background: #ffffff;
+  color: #5f6b76;
+  padding: 2rem 1.25rem;
+  border-top: 1px solid var(--global-border);
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo,
+.footer-links,
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-logo img {
+  height: 50px;
+  width: auto;
+}
+
+.footer-column h4 {
+  margin: 0 0 0.3rem;
+  color: var(--global-primary-dark);
+}
+
+.footer-column a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-column a:hover {
+  color: var(--global-primary);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  padding-top: 3rem;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background-color: white;
+  margin: auto;
+  padding: 1.5rem;
+  border-radius: 14px;
+  width: min(92vw, 420px);
+  position: relative;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  right: 1rem;
+  top: 0.75rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+
+.dashboard-btn {
+  width: 100%;
+}
+
+.input-field {
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--global-border);
+  font-size: 1rem;
+  margin: 0.6rem 0 1rem;
+  width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+  color: var(--global-text);
+}
+
+.input-field:hover {
+  border-color: var(--global-primary);
+  background-color: #f7fcfc;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--global-primary);
+  box-shadow: 0 0 0 3px rgba(1, 92, 93, 0.12);
+}
+
+.select-dropdown option {
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+#content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  padding: 1rem 0;
+}
+
+.doctor-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--global-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
   }
-  
-  .footer-logo img {
-    height: 50px;
-    width: auto;
+
+  nav {
+    margin-top: 0.6rem;
   }
-  
-  .footer-logo p {
-    font-size: 14px;
-    color: #0a0a23;
+
+  nav a {
+    margin: 0 0.5rem 0 0;
   }
-  
+
+  .logo-img {
+    height: 30px;
+  }
+
+  .logo-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .footer-links {
-    display: flex;
-    flex: 2 1 500px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .footer-column {
-    display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1rem;
   }
-  
-  .footer-column h4 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #0a0a23;
-  }
-  
-  .footer-column a {
-    text-decoration: none;
-    color: #0a0a23;
-    font-size: 14px;
-  }
-  
-  .footer-column a:hover {
-    color: #003e3e;
-    transition: color 0.3s ease;
-  }
-  
-  /* Mobile Responsiveness */
-  @media (max-width: 768px) {
-    .footer-container {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .footer-links {
-      flex-direction: column;
-      gap: 20px;
-    }
-  }
-  
+}
 
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    padding-top: 60px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-  }
-  
-  .modal-content {
-    background-color: white;
-    margin: auto;
-    padding: 30px;
-    border-radius: 10px;
-    width: 400px;
-    position: relative;
-  }
-  
-  .modal-content h2{
-    font-size: 32px;
-  }
-
-  .close {
-    color: #aaa;
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .close:hover {
-    color: black;
-  }
-
-
-
-  .dashboard-btn{
-    width: 100%;
-  }
-
-  .input-field {
-    padding: 10px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    appearance: none; /* Remove default OS styles */
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  .input-field:hover {
-    border-color: #015c5d;
-    background-color: #f0fdfd;
-  }
-  
-  .input-field:focus {
-    outline: none;
-    border-color: #015c5d;
-    box-shadow: 0 0 5px rgba(1, 92, 93, 0.5);
-    filter: brightness(1.2);
-  }
-  
-  .select-dropdown option {
-    font-size: 16px;
-    padding: 10px;
-  }
-  
-
-  #content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
-    gap: 40px;
-    padding: 20px;
-  }
-
-  .doctor-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    width:auto;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease;
-  }
   
   .doctor-card:hover {
     transform: scale(1.02);

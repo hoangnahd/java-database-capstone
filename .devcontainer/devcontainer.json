@@ -1,0 +1,19 @@
+{
+    "name": "Java",
+    "image": "mcr.microsoft.com/devcontainers/java:3-17-trixie",
+
+    "features": {
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "none",
+            "installMaven": "true",
+            "installGradle": "false"
+        }
+    },
+
+    // Uncomment this line and add your ports!
+    "forwardPorts": [8080, 35729]
+
+    // "postCreateCommand": "java -version",
+    // "customizations": {},
+    // "remoteUser": "root"
+}

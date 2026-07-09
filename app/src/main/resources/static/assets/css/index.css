@@ -1,53 +1,111 @@
 /* this is the style sheet file for index.htlm  */
 
-/* 
-**Global Reset (`*`)**
+:root {
+  --index-primary: #015c5d;
+  --index-primary-dark: #003e3e;
+  --index-accent: #a62b1f;
+  --index-text: #17323b;
+  --index-surface: rgba(255, 255, 255, 0.9);
+}
 
-* Remove all default margin and padding.
-* Use `border-box` for sizing to include padding and border in element size.
+* {
+  box-sizing: border-box;
+}
 
-**Base (`html, body`)**
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: 'Roboto', Arial, sans-serif;
+  color: var(--index-text);
+}
 
-* Set height to 100% for full viewport layout.
-* Use the `'Roboto'` sans-serif font for modern, clean typography.
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-**Layout Wrapper (`.wrapper`)**
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.9)),
+              url('../images/medical-bg.jpg') center/cover no-repeat;
+}
 
-* Use a vertical flexbox layout.
-* Ensure the wrapper covers at least the full height of the screen (`min-height: 100vh`).
+.hero-card {
+  width: min(720px, 100%);
+  background: var(--index-surface);
+  border-radius: 24px;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.12);
+  padding: 2.2rem;
+  text-align: center;
+}
 
-**Heading (`h2`)**
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.8rem;
+  color: var(--index-accent);
+  font-weight: 700;
+}
 
-* Set a large font size (`48px`) for prominence.
-* Add a bottom margin of `50px` for spacing.
-* Use a dark teal color (`#003e3e`).
-* Make the font bold and use a blended font stack (`'Alegreya', 'Roboto', sans-serif`) for elegant styling.
+h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 700;
+  color: var(--index-primary-dark);
+  font-family: 'Alegreya', 'Roboto', sans-serif;
+}
 
-**Main Section (`.main-content`)**
+.role-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1.5rem;
+}
 
-* Allow the section to grow to fill space with `flex-grow: 1`.
-* Add `40px` of internal padding.
-* Center content both horizontally and vertically using `justify-content` and `align-items`.
-* Display items in a column direction.
-* Center all text.
-* Apply a full-screen background image with:
+.role-card,
+.dashboard-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.95rem 1.2rem;
+  width: 100%;
+  background: var(--index-primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 180ms ease, transform 180ms ease;
+}
 
-  * `cover` size
-  * `center` positioning
-  * no repeat
-  * `fixed` attachment to keep image still during scroll
+.role-card:hover,
+.dashboard-btn:hover {
+  background: var(--index-accent);
+  transform: translateY(-1px);
+}
 
-**Buttons (`button`)**
+.dashboard-btn {
+  background: var(--index-primary);
+}
 
-* Style with a teal green background (`#015c5d`) and white text.
-* Remove borders and round the corners (`12px`).
-* Use `10px 20px` padding and set width to `200px`.
-* Add a top margin of `10px` for spacing.
-* Enable pointer cursor and readable font size (`16px`).
-* On hover, change background color to bold red (`#A62B1F`).
+.dashboard-btn:hover {
+  background: var(--index-primary-dark);
+}
 
-**Dashboard Buttons (`.dashboard-btn`)**
+@media (max-width: 720px) {
+  .main-content {
+    padding: 1.2rem;
+  }
 
-* Use the same base green background (`#015c5d`) as the default button.
-* On hover, darken the background to deep teal (`#003e3e`) for visual feedback.
- */
+  .hero-card {
+    padding: 1.4rem;
+  }
+
+  .role-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

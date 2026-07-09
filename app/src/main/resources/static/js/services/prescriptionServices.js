@@ -11,12 +11,12 @@ export async function savePrescription(prescription, token) {
       },
       body: JSON.stringify(prescription)
     });
-    const result = await response.json();
-    return { success: response.ok, message: result.message }
+    const result = await response.json().catch(() => ({}));
+    return { success: response.ok, message: result.message || (response.ok ? 'Prescription saved.' : 'Unable to save prescription.') };
   }
   catch (error) {
-    console.error("Error :: savePrescription :: ", error)
-    return { success: false, message: result.message }
+    console.error("Error :: savePrescription :: ", error);
+    return { success: false, message: "Network error while saving prescription." };
   }
 }
 
