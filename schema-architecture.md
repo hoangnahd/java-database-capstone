@@ -1,11 +1,62 @@
-The spring boot appliction uses MVC and REST Controllers. Thymeleaf controllers are used for admin and doctor dashboard, while Rest Controllers serve all other modules.The appication interacts with two databases MySQL (for patient, doctor, appointment, and admin data) and MongoDB(for precription). All controllers route requests through a common service layer, which in turn delegtes to approprite JPA Entities.
+-- Create the database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS cms;
+USE cms;
 
-Numbered flow of data and control
+-- 1. Admin Table
+CREATE TABLE admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-1. User accesses AdminDashboard or Appointment pages.
-2. The action is routed to the appropriate thymeleaf or REST controller.
-3. The controller call the services layer to route to appropriate repositories
-4. For relational date, the service layer calls the MySQL repositories. If the document data like prescription, the layer calls MongoDB repositories.
-5. The repositories MySQL or MongoDB directly interact with the physical databases.
-6. The data retrieved from the databases is mapped into the core repo model structure.
-7. These models are defined by specific JPA Entities representing core domain objects.
+-- 2. Doctor Table
+CREATE TABLE doctor (
+    doctor_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    specialty VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(20) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Patient Table
+CREATE TABLE patient (
+    patient_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    dob DATE NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. Appointment Table (Handles Relationships)
+CREATE TABLE appointment (
+    appointment_id INT AUTO_INCREMENT PRIMARY KEY,
+    doctor_id INT NOT NULL,
+    patient_id INT NOT NULL,
+    appointment_date DATE NOT NULL,
+    appointment_time TIME NOT NULL,
+    status VARCHAR(20) DEFAULT 'Pending',
+    reason TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Foreign Key Constraints linking to Doctor and Patient tables
+    CONSTRAINT fk_appointment_doctor 
+        FOREIGN KEY (doctor_id) 
+        REFERENCES doctor(doctor_id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+        
+    CONSTRAINT fk_appointment_patient 
+        FOREIGN KEY (patient_id) 
+        REFERENCES patient(patient_id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+);
