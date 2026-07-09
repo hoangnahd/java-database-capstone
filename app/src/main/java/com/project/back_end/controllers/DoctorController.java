@@ -47,6 +47,12 @@ public class DoctorController {
     @PostMapping("/{token}")
     public ResponseEntity<Map<String, Object>> saveDoctor(@PathVariable String token,
                                                            @RequestBody Doctor doctor) {
+        // Token validation logic
+        if (token == null || token.isBlank() || !doctorService.isValidToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid or missing token. Authorization denied."));
+        }
+
         int result = doctorService.saveDoctor(doctor);
 
         if (result == 1) {
@@ -69,5 +75,30 @@ public class DoctorController {
                                                              @RequestParam(defaultValue = "") String specialty) {
         List<Doctor> doctors = doctorService.filterDoctorsByNameSpecilityandTime(name, specialty, time);
         return ResponseEntity.ok(Map.of("doctors", doctors));
+    }
+
+    /**
+     * Retrieves a doctor's availability based on user role, doctor ID, date, and security token.
+     */
+    @GetMapping("/availability/{user}/{doctorId}/{date}/{token}")
+    public ResponseEntity<Map<String, Object>> getDoctorAvailability(@PathVariable String user,
+                                                                     @PathVariable Long doctorId,
+                                                                     @PathVariable String date,
+                                                                     @PathVariable String token) {
+        // Critical Requirement: Token Validation
+        if (token == null || token.isBlank() || !doctorService.isValidToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid or expired token. Access denied."));
+        }
+
+        // Fetch availability from service layer using the provided parameters
+        List<Map<String, Object>> availability = doctorService.getDoctorAvailability(user, doctorId, date);
+
+        if (availability == null || availability.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "No availability found for the given criteria."));
+        }
+
+        return ResponseEntity.ok(Map.of("availability", availability));
     }
 }
